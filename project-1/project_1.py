@@ -20,7 +20,7 @@ def gaussian_profile(frequency, mult_peak=False, baseline=0.1, slope=0.01, scale
 
     return exp1 if not mult_peak else mult
 
-def make_panels(profile_func='gaussian', source_func='exp'):
+def make_panels(profile_func='gaussian', source_func='exp', mult_mu=False):
 
     n = 101
 
@@ -85,10 +85,17 @@ def make_panels(profile_func='gaussian', source_func='exp'):
     ax2.plot(z[tau_z0], 1, 'bo')
     ax2.plot(z[tau_zhalf], 1, 'ro')
 
-    ax3.set_title(r'Intensity $I(\nu)$')
-    ax3.plot(freq, I, color='black')
+    ax3.set_title(r'Intensity I$(\nu)$')
+    ax3.plot(freq, I, color='black', label=r'I$(\mu=1)$')
     ax3.plot(freq[0], I[0], 'bo')
     ax3.plot(freq[50], I[50], 'ro')
+
+    if mult_mu:
+        I2 = np.trapz(S[:, np.newaxis] * np.exp(-tau / 0.2), tau, axis=0)
+        ax3.plot(freq, I2, color='darkorange', label=r'I$(\mu=0.2)$')
+        ax3.plot(freq[0], I2[0], 'bo')
+        ax3.plot(freq[50], I2[50], 'ro')
+        ax3.legend()
 
     ax4.set_title(r'Source function $S(z)$')
     ax4.plot(z, S, color='black')
@@ -99,6 +106,7 @@ def make_panels(profile_func='gaussian', source_func='exp'):
 
 # make_panels()
 # make_panels(profile_func=(True, 0.2, 0, 1000), source_func='exp2')
-make_panels(profile_func=(True, 0.2, 0, 1000), source_func='linear')
+# make_panels(profile_func=(True, 0.2, 0, 1000), source_func='linear')
+make_panels(profile_func=(False, 0.2, 0, 1000), source_func='linear', mult_mu=True)
 
 plt.show()
