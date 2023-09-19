@@ -22,6 +22,9 @@ def gaussian_profile(frequency, mult_peak=False, baseline=0.1, slope=0.01, scale
 
 def make_panels(profile_func='gaussian', source_func='exp', mult_mu=False):
 
+    figname = source_func
+    figname += 'mult.png' if mult_mu else '.png'
+
     n = 101
 
     freq = np.linspace(-5, 5, n)
@@ -92,7 +95,7 @@ def make_panels(profile_func='gaussian', source_func='exp', mult_mu=False):
 
     if mult_mu:
         I2 = np.trapz(S[:, np.newaxis] * np.exp(-tau / 0.2), tau, axis=0)
-        ax3.plot(freq, I2, color='darkorange', label=r'I$(\mu=0.2)$')
+        ax3.plot(freq, I2, color='saddlebrown', label=r'I$(\mu=0.2)$')
         ax3.plot(freq[0], I2[0], 'bo')
         ax3.plot(freq[50], I2[50], 'ro')
         ax3.legend()
@@ -103,10 +106,10 @@ def make_panels(profile_func='gaussian', source_func='exp', mult_mu=False):
     ax4.plot(z[tau_zhalf], S[tau_zhalf], 'ro')
 
     fig.tight_layout()
+    fig.savefig('figures/' + figname, bbox_inches='tight')
 
-# make_panels()
-# make_panels(profile_func=(True, 0.2, 0, 1000), source_func='exp2')
-# make_panels(profile_func=(True, 0.2, 0, 1000), source_func='linear')
+make_panels()
+make_panels(profile_func=(True, 0.2, 0, 1000), source_func='linear')
 make_panels(profile_func=(False, 0.2, 0, 1000), source_func='linear', mult_mu=True)
 
 plt.show()
