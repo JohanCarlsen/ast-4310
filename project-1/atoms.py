@@ -104,7 +104,16 @@ class Atom:
             Electron pressure in units of Pa or equivalent.
         """
         # your code here
-        pass
+        partition_function = self.compute_partition_function(temperature)
+        electron_density = electron_pressure / (constants.k_B * temperature)
+        saha_const = ((2 * numpy.pi * constants.m_e * constants.k_B * temperature) / (constants.h**2))**(3/2)
+        nstage = numpy.zeros_like(partition_function) / units.m**3
+        nstage[0] = 1. / units.m**3
+
+        for r in range(self.n_stages - 1):
+            nstage[r+1] = (nstage[r] / electron_density * 2 * saha_const * partition_function[r+1] / partition_function[r] * numpy.exp(-self.chi_ion[r+1, numpy.newaxis] / (constants.k_B * temperature[numpy.newaxis])))
+        
+        return nstage / numpy.nansum(nstage, axis=0)
 
     def compute_populations(self, temperature, electron_pressure):
         """
@@ -119,7 +128,7 @@ class Atom:
             Electron pressure in units of Pa or equivalent.
         """
         # your code here
-        pass
+        return (self.compute_excitation(temperature) * self.compute_ionisation(temperature, electron_pressure)[:, numpy.newaxis])
 
     def plot_payne(self, temperature, electron_pressure):
         """
@@ -133,8 +142,42 @@ class Atom:
             Electron pressure in units of Pa or equivalent.
         """
         # your code here
-        pass
+        pops = self.compute_populations(temperature, electron_pressure)
+        fig, ax = plt.subplots()
+        ax.plot(numpy.tile(temperature, (self.n_stages, 1)).T, pops[:, 0].T, 'b-')
+        n_levels = self.chi.shape[1]
+
+        if n_levels > 1:
+            ax.plot(numpy.tile(temperature, (self.n_stages, 1)).T, pops[:, 1].T, 'r--')
+        
+        if n_levels > 2:
+            ax.plot(numpy.tile(temperature, (self.n_stages, 1)).T, pops[:, 2].T, 'k:')
+        
+        ax.set_yscale('log')
+        ax.set_ylim(1e-6, 1.1)
+        ax.set_xlabel('Temperature [K]')
+        ax.set_ylabel('Populations')
 
 h = Atom('H_atom.txt')
-part = h.compute_partition_function(5000 * units.K)
-print(part)
+h.compute_partition_function(5000 * units.K)
+
+ca = Atom('Ca_atom.txt')
+temp = numpy.linspace(100, 175000, 500) * units.K 
+e_press = 100 * units.kPa
+# ca.plot_payne(temp, e_press)
+# plt.title('Payne diagram, Ca, 100 kPa')
+
+temp = numpy.linspace(1000, 20000, 100) * units.K 
+epress = (100*units.dyne / units.cm**2).to('Pa')
+hpops = h.compute_populations(temp, epress)
+capops = ca.compute_populations(temp, epress)
+
+ca_abund = 2e-6
+ca_h_ratio = capops[1, 0] / hpops[0, 1] * ca_abund
+
+fig, ax = plt.subplots()
+ax.plot(temp, ca_h_ratio)
+ax.axhline(y=1, ls='--', color='k')
+ax.set_yscale('log')
+
+plt.show()
