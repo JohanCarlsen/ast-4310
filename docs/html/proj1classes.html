@@ -101,28 +101,25 @@ and ionisation fractions according to Saha’s law.</p>
 <span class="sig-name descname"><span class="pre">compute_excitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atoms.Atom.compute_excitation" title="Link to this definition"></a></dt>
 <dd><p>Computes the level populations relative to the ground state,
 according to the Boltzmann law.</p>
-<section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>temperature: astropy.units.quantity (scalar or array)</dt><dd><p>Gas temperature in units of K or equivalent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>temperature</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em> or </em><em>array</em><em>)</em>) – Gas temperature in units of K or equivalent.</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="atoms.Atom.compute_ionisation">
 <span class="sig-name descname"><span class="pre">compute_ionisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electron_pressure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atoms.Atom.compute_ionisation" title="Link to this definition"></a></dt>
 <dd><p>Computes ionisation fractions according to the Saha law.</p>
-<section id="id1">
-<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>temperature: astropy.units.quantity (scalar or array)</dt><dd><p>Gas temperature in units of K or equivalent.</p>
-</dd>
-<dt>electron_pressure: astropy.units.quantity (scalar)</dt><dd><p>Electron pressure in units of Pa or equivalent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em> or </em><em>array</em><em>)</em>) – Gas temperature in units of K or equivalent.</p></li>
+<li><p><strong>electron_pressure</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em>)</em>) – Electron pressure in units of Pa or equivalent.</p></li>
+</ul>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -130,13 +127,11 @@ according to the Boltzmann law.</p>
 <span class="sig-name descname"><span class="pre">compute_partition_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atoms.Atom.compute_partition_function" title="Link to this definition"></a></dt>
 <dd><p>Computes partition functions using the atomic level energies and
 statistical weights.</p>
-<section id="id2">
-<h2>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>temperature: astropy.units.quantity (scalar or array)</dt><dd><p>Gas temperature in units of K or equivalent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>temperature</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em> or </em><em>array</em><em>)</em>) – Gas temperature in units of K or equivalent.</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -144,43 +139,39 @@ statistical weights.</p>
 <span class="sig-name descname"><span class="pre">compute_populations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electron_pressure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atoms.Atom.compute_populations" title="Link to this definition"></a></dt>
 <dd><p>Computes relative level populations for all levels and all
 ionisation stages using the Bolzmann and Saha laws.</p>
-<section id="id3">
-<h2>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>temperature: astropy.units.quantity (scalar or array)</dt><dd><p>Gas temperature in units of K or equivalent.</p>
-</dd>
-<dt>electron_pressure: astropy.units.quantity (scalar)</dt><dd><p>Electron pressure in units of Pa or equivalent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em> or </em><em>array</em><em>)</em>) – Gas temperature in units of K or equivalent.</p></li>
+<li><p><strong>electron_pressure</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em>)</em>) – Electron pressure in units of Pa or equivalent.</p></li>
+</ul>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="atoms.Atom.plot_payne">
 <span class="sig-name descname"><span class="pre">plot_payne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electron_pressure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atoms.Atom.plot_payne" title="Link to this definition"></a></dt>
 <dd><p>Plots the Payne curves for the current atom.</p>
-<section id="id4">
-<h2>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>temperature: astropy.units.quantity (array)</dt><dd><p>Gas temperature in units of K or equivalent.</p>
-</dd>
-<dt>electron_pressure: astropy.units.quantity (scalar)</dt><dd><p>Electron pressure in units of Pa or equivalent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>astropy.units.quantity</em><em> (</em><em>array</em><em>)</em>) – Gas temperature in units of K or equivalent.</p></li>
+<li><p><strong>electron_pressure</strong> (<em>astropy.units.quantity</em><em> (</em><em>scalar</em><em>)</em>) – Electron pressure in units of Pa or equivalent.</p></li>
+</ul>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="atoms.Atom.read_atom">
 <span class="sig-name descname"><span class="pre">read_atom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atoms.Atom.read_atom" title="Link to this definition"></a></dt>
 <dd><p>Reads atom structure from text file.</p>
-<section id="id5">
-<h2>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>filename: string</dt><dd><p>Name of file with atomic data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>string</em>) – Name of file with atomic data.</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 </dd></dl>
