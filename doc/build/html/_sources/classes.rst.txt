@@ -1,4 +1,0 @@
-Classes
-=======
-
-    .. autoclass:: atoms.Atom
