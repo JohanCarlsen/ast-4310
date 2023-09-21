@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import sys
 sys.path.append('/Users/johancarlsen/Desktop/ast4310/ast-4310/project-1/')
-project = 'Spectrum'
+project = 'AST4310'
 copyright = '2023, Johan Carlsen'
 author = 'Johan Carlsen'
 
