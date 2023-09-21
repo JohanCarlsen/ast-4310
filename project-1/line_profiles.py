@@ -64,8 +64,8 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
     -----------
     profile_func : callable or tuple, optional
         The function describing the extinction profile. User can provide their own if they want.
-        Default is the `gaussian_profile`. If a `tuple`, the elements are (bool, float, float, float),
-        representing the arguments of the `gaussian_profile`.
+        Default is the :any:`gaussian_profile`. If a `tuple`, the elements are (bool, float, float, float),
+        representing the arguments of the :any:`gaussian_profile`.
 
     source_func : string, optional 
         Form of the source function. The two forms are:
