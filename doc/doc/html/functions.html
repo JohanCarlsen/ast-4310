@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Functions &mdash; Spectrum  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Classes" href="classes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Spectrum
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#line_profiles.gaussian_profile"><code class="docutils literal notranslate"><span class="pre">gaussian_profile()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#line_profiles.make_panels"><code class="docutils literal notranslate"><span class="pre">make_panels()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Spectrum</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="functions">
+<h1>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="line_profiles.gaussian_profile">
+<span class="sig-prename descclassname"><span class="pre">line_profiles.</span></span><span class="sig-name descname"><span class="pre">gaussian_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mult_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#line_profiles.gaussian_profile" title="Link to this definition"></a></dt>
+<dd><p>Compute a Gaussian profile as function of frequency, on the form:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[f(\nu) = ae^{-\nu^2/c} + \mathrm{continuum}\]</div>
+</div></blockquote>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl>
+<dt>frequency<span class="classifier">array_like </span></dt><dd><p>Array containing the frequencies.</p>
+</dd>
+<dt>mult_peaks<span class="classifier">bool, default=False </span></dt><dd><p>If set to True, a Gaussian profile with 3 peaks will be returned.</p>
+</dd>
+<dt>baseline<span class="classifier">float, default=0.1</span></dt><dd><p>The continuum is considered to be on the form:</p>
+<div class="math notranslate nohighlight">
+\[y = a + bx,\]</div>
+<p>where a is the baseline.</p>
+</dd>
+<dt>slope<span class="classifier">float, default=0.01</span></dt><dd><p>Slope of the continuum (see baseline).</p>
+</dd>
+<dt>scale<span class="classifier">int or float, default=100</span></dt><dd><p>The returned profile will be scaled down with this value, ie. if G is the Gaussian, the 
+returned value is G/scale.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The Gaussian profile with 1 or 3 peaks plus the baseline.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="line_profiles.make_panels">
+<span class="sig-prename descclassname"><span class="pre">line_profiles.</span></span><span class="sig-name descname"><span class="pre">make_panels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gaussian'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gaussian'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mult_mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#line_profiles.make_panels" title="Link to this definition"></a></dt>
+<dd><p>Create four panels for visualising the extinction, optical depth, intensity, and source function.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl>
+<dt>profile_func<span class="classifier">callable or tuple, optional</span></dt><dd><p>The function describing the extinction profile. User can provide their own if they want.
+Default is the <cite>gaussian_profile</cite>. If a <cite>tuple</cite>, the elements are (bool, float, float, float),
+representing the arguments of the <cite>gaussian_profile</cite>.</p>
+</dd>
+<dt>source_func<span class="classifier">string, optional </span></dt><dd><p>Form of the source function. The two forms are:</p>
+<blockquote>
+<div><ul>
+<li><dl>
+<dt>‘gaussian’ (default): Gaussian function on the form:</dt><dd><div class="math notranslate nohighlight">
+\[S(\nu) = \exp{-\frac{(\nu-500)^2}{1.5\cdot10^5}} + 65\]</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>‘linear’: Linear function on the form:</dt><dd><div class="math notranslate nohighlight">
+\[S(\nu) = \frac{\nu}{50} + 65\]</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>mult_mu<span class="classifier">bool, default=False</span></dt><dd><p>If True, the intensity panel will display two curves, one for mu = 1, and one for mu = 0.2</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classes.html" class="btn btn-neutral float-left" title="Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Johan Carlsen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
