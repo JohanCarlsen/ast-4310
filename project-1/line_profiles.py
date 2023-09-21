@@ -9,10 +9,11 @@ plt.rcParams.update({
 })
 
 def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scale=100):
-    '''
-    Compute a Gaussian profile as function of frequency, on the form
+    r'''
+    Compute a Gaussian profile as function of frequency, on the form:
 
-        f(x) = a * exp(-x^2 / c) + continuum
+        .. math::
+            f(\nu) = ae^{-\nu^2/c} + \mathrm{continuum}
 
     Parameters:
     -----------
@@ -23,7 +24,12 @@ def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scal
         If set to True, a Gaussian profile with 3 peaks will be returned.
 
     baseline : float, default=0.1
-        The continuum is considered to be on the form y = a + bx, where a is the baseline.
+        The continuum is considered to be on the form:
+            
+        .. math::
+            y = a + bx,
+        
+        where a is the baseline.
 
     slope : float, default=0.01
         Slope of the continuum (see baseline).
@@ -51,7 +57,7 @@ def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scal
     return profile   
 
 def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
-    '''
+    r'''
     Create four panels for visualising the extinction, optical depth, intensity, and source function.
 
     Parameters:
@@ -64,8 +70,13 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
     source_func : string, optional 
         Form of the source function. The two forms are:
 
-            * 'gaussian' (default): Gaussian function on the form S(x) = exp[-(x - 500)^2 / (1.5*10^5)] + 0.65
-            * 'linear': Linear function on the form S(x) = 2x / 100 + 0.65
+            * 'gaussian' (default): Gaussian function on the form:
+                .. math::
+                    S(\nu) = \exp{-\frac{(\nu-500)^2}{1.5\cdot10^5}} + 65
+
+            * 'linear': Linear function on the form:
+                .. math::
+                    S(\nu) = \frac{\nu}{50} + 65
 
     mult_mu : bool, default=False
         If True, the intensity panel will display two curves, one for mu = 1, and one for mu = 0.2
