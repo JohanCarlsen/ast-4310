@@ -1,8 +1,8 @@
-import numpy
+import numpy as np 
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from astropy import units
-from astropy import constants
+from astropy import constants as const
 from astropy.visualization import quantity_support
 quantity_support()
 
@@ -33,7 +33,7 @@ class Atom:
         filename: string
             Name of file with atomic data.
         """
-        tmp = numpy.loadtxt(filename, unpack=True)
+        tmp = np.loadtxt(filename, unpack=True)
         self.n_stages = int(tmp[2].max()) + 1
         # Get maximum number of levels in any stage
         self.max_levels = 0
@@ -41,9 +41,9 @@ class Atom:
             self.max_levels = max(self.max_levels, (tmp[2] == i).sum())
         # Populate level energies and statistical weights
         # Use a square array filled with NaNs for non-existing levels
-        chi = numpy.empty((self.n_stages, self.max_levels))
-        chi.fill(numpy.nan)
-        self.g = numpy.copy(chi)
+        chi = np.empty((self.n_stages, self.max_levels))
+        chi.fill(np.nan)
+        self.g = np.copy(chi)
         for i in range(self.n_stages):
             nlevels = (tmp[2] == i).sum()
             chi[i, :nlevels] = tmp[0][tmp[2] == i]
@@ -53,7 +53,7 @@ class Atom:
         # Save ionisation energies, saved as energy of first level in each stage
         self.chi_ion = chi[:, 0].copy()
         # Save level energies relative to ground level in each stage
-        self.chi = chi - self.chi_ion[:, numpy.newaxis]
+        self.chi = chi - self.chi_ion[:, np.newaxis]
         self.loaded = True
         
     def compute_partition_function(self, temperature):
@@ -66,13 +66,13 @@ class Atom:
         temperature: astropy.units.quantity (scalar or array)
             Gas temperature in units of K or equivalent.
         """
-        temp = temperature[numpy.newaxis, numpy.newaxis]
+        temp = temperature[np.newaxis, np.newaxis]
         # your code here
-        result = numpy.nansum(
-            self.g[..., numpy.newaxis] * 
-            numpy.exp(-self.chi[..., numpy.newaxis] / constants.k_B / temp), 
+        result = np.nansum(
+            self.g[..., np.newaxis] * 
+            np.exp(-self.chi[..., np.newaxis] / const.k_B / temp), 
             axis=1)
-        
+
         return result
     
     def compute_excitation(self, temperature):
@@ -86,10 +86,10 @@ class Atom:
             Gas temperature in units of K or equivalent.
         """
         # your code here
-        temp = temperature[numpy.newaxis, numpy.newaxis]
+        temp = temperature[np.newaxis, np.newaxis]
         U = self.compute_partition_function(temperature)
         
-        result = self.g[..., numpy.newaxis] / U[:, numpy.newaxis] * numpy.exp(-self.chi[..., numpy.newaxis] / (constants.k_B * temp))
+        result = self.g[..., np.newaxis] / U[:, np.newaxis] * np.exp(-self.chi[..., np.newaxis] / (const.k_B * temp))
         return result
        
     def compute_ionisation(self, temperature, electron_pressure):
@@ -105,15 +105,15 @@ class Atom:
         """
         # your code here
         partition_function = self.compute_partition_function(temperature)
-        electron_density = electron_pressure / (constants.k_B * temperature)
-        saha_const = ((2 * numpy.pi * constants.m_e * constants.k_B * temperature) / (constants.h**2))**(3/2)
-        nstage = numpy.zeros_like(partition_function) / units.m**3
+        electron_density = electron_pressure / (const.k_B * temperature)
+        saha_const = ((2 * np.pi * const.m_e * const.k_B * temperature) / (const.h**2))**(3/2)
+        nstage = np.zeros_like(partition_function) / units.m**3
         nstage[0] = 1. / units.m**3
 
         for r in range(self.n_stages - 1):
-            nstage[r+1] = (nstage[r] / electron_density * 2 * saha_const * partition_function[r+1] / partition_function[r] * numpy.exp(-self.chi_ion[r+1, numpy.newaxis] / (constants.k_B * temperature[numpy.newaxis])))
+            nstage[r+1] = (nstage[r] / electron_density * 2 * saha_const * partition_function[r+1] / partition_function[r] * np.exp(-self.chi_ion[r+1, np.newaxis] / (const.k_B * temperature[np.newaxis])))
         
-        return nstage / numpy.nansum(nstage, axis=0)
+        return nstage / np.nansum(nstage, axis=0)
 
     def compute_populations(self, temperature, electron_pressure):
         """
@@ -128,7 +128,7 @@ class Atom:
             Electron pressure in units of Pa or equivalent.
         """
         # your code here
-        return (self.compute_excitation(temperature) * self.compute_ionisation(temperature, electron_pressure)[:, numpy.newaxis])
+        return (self.compute_excitation(temperature) * self.compute_ionisation(temperature, electron_pressure)[:, np.newaxis])
 
     def plot_payne(self, temperature, electron_pressure):
         """
@@ -144,40 +144,42 @@ class Atom:
         # your code here
         pops = self.compute_populations(temperature, electron_pressure)
         fig, ax = plt.subplots()
-        ax.plot(numpy.tile(temperature, (self.n_stages, 1)).T, pops[:, 0].T, 'b-')
+        ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 0].T, 'b-')
         n_levels = self.chi.shape[1]
 
         if n_levels > 1:
-            ax.plot(numpy.tile(temperature, (self.n_stages, 1)).T, pops[:, 1].T, 'r--')
+            ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 1].T, 'r--')
         
         if n_levels > 2:
-            ax.plot(numpy.tile(temperature, (self.n_stages, 1)).T, pops[:, 2].T, 'k:')
+            ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 2].T, 'k:')
         
         ax.set_yscale('log')
         ax.set_ylim(1e-6, 1.1)
         ax.set_xlabel('Temperature [K]')
         ax.set_ylabel('Populations')
 
-h = Atom('H_atom.txt')
-h.compute_partition_function(5000 * units.K)
+if __name__ == '__main__':
 
-ca = Atom('Ca_atom.txt')
-temp = numpy.linspace(100, 175000, 500) * units.K 
-e_press = 100 * units.kPa
-# ca.plot_payne(temp, e_press)
-# plt.title('Payne diagram, Ca, 100 kPa')
+    h = Atom('H_atom.txt')
 
-temp = numpy.linspace(1000, 20000, 100) * units.K 
-epress = (100*units.dyne / units.cm**2).to('Pa')
-hpops = h.compute_populations(temp, epress)
-capops = ca.compute_populations(temp, epress)
+    ca = Atom('Ca_atom.txt')
+    temp = np.linspace(100, 175000, 500) * units.K 
+    e_press = 100 * units.kPa
+    ca.plot_payne(temp, e_press)
+    plt.title('Payne diagram, Ca, 100 kPa')
 
-ca_abund = 2e-6
-ca_h_ratio = capops[1, 0] / hpops[0, 1] * ca_abund
 
-fig, ax = plt.subplots()
-ax.plot(temp, ca_h_ratio)
-ax.axhline(y=1, ls='--', color='k')
-ax.set_yscale('log')
+    temp = np.linspace(1000, 20000, 100) * units.K 
+    epress = (100*units.dyne / units.cm**2).to('Pa')
+    hpops = h.compute_populations(temp, epress)
+    capops = ca.compute_populations(temp, epress)
 
-plt.show()
+    ca_abund = 2e-6
+    ca_h_ratio = capops[1, 0] / hpops[0, 1] * ca_abund
+
+    fig, ax = plt.subplots()
+    ax.plot(temp, ca_h_ratio)
+    ax.axhline(y=1, ls='--', color='k')
+    ax.set_yscale('log')
+
+    plt.show()
