@@ -111,7 +111,7 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
 
         make_panels()
     
-    .. image:: ./gaussian.png
+    .. image:: project-1/figures/gaussian.png
         :width: 400
     '''
     # Number of frequency elements.
