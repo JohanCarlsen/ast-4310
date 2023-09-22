@@ -5,8 +5,10 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+import os 
 import sys
-sys.path.append('/Users/johancarlsen/Desktop/ast4310/ast-4310/project-1/')
+sys.path.insert(0, os.path.abspath('../../project-1'))
+
 project = 'AST4310'
 copyright = '2023, Johan Carlsen'
 author = 'Johan Carlsen'

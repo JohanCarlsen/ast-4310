@@ -110,9 +110,8 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
     .. code-block:: python 
 
         make_panels()
-        plt.show()
     
-    .. image:: figures/linear.png
+    .. image:: ./gaussian.png
         :width: 400
     '''
     # Number of frequency elements.
