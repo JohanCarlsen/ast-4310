@@ -17,13 +17,13 @@ def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scal
 
     Parameters:
     -----------
-    frequency : array_like 
+    frequency : ``array_like``
         Array containing the frequencies.
 
-    mult_peaks : bool, default=False 
-        If set to True, a Gaussian profile with 3 peaks will be returned.
+    mult_peaks : ``bool``, default=``False`` 
+        If set to ``True``, a Gaussian profile with 3 peaks will be returned.
 
-    baseline : float, default=0.1
+    baseline : ``float``, default=0.1
         The continuum is considered to be on the form:
             
         .. math::
@@ -31,16 +31,16 @@ def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scal
         
         where a is the baseline.
 
-    slope : float, default=0.01
+    slope : ``float``, default=0.01
         Slope of the continuum (see baseline).
 
-    scale : int or float, default=100
+    scale : ``int`` or ``float``, default=100
         The returned profile will be scaled down with this value, ie. if G is the Gaussian, the 
         returned value is G/scale.
 
     Returns:
     --------
-    array_like
+    ``array_like``
         The Gaussian profile with 1 or 3 peaks plus the baseline.
     '''
     cont = baseline + slope * frequency # Continuum
@@ -62,12 +62,12 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
 
     Parameters:
     -----------
-    profile_func : callable or tuple, optional
+    profile_func : ``callable`` or ``tuple``, optional
         The function describing the extinction profile. User can provide their own if they want.
-        Default is the :any:`gaussian_profile`. If a `tuple`, the elements are (bool, float, float, float),
+        Default is the :any:`gaussian_profile`. If a ``tuple``, the elements are (bool, float, float, float),
         representing the arguments of the :any:`gaussian_profile`.
 
-    source_func : string, optional 
+    source_func : ``string``, optional 
         Form of the source function. The two forms are:
 
             * 'gaussian' (default): Gaussian function on the form:
@@ -78,8 +78,9 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
                 .. math::
                     S(\nu) = \frac{\nu}{50} + 65
 
-    mult_mu : bool, default=False
-        If True, the intensity panel will display two curves, one for mu = 1, and one for mu = 0.2
+    mult_mu : ``bool``, default=``False``
+        If ``True``, the intensity panel will display two curves, one for :math: \mu = 1
+        , and one for :math: \mu = 0.2
     '''
     # Number of frequency elements.
     n = 101
