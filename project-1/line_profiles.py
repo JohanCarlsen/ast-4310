@@ -42,6 +42,26 @@ def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scal
     --------
     ``array_like``
         The Gaussian profile with 1 or 3 peaks plus the baseline.
+    
+    Example:
+    --------
+    Default call to :any:`gaussian_profile`:
+
+    .. code-block:: python 
+
+        import numpy as np 
+
+        nu = np.linspace(-5, 5, 101)
+        alpha = gaussian_profile(nu)
+    
+    Or, with multiple peaks and no continuum (b = 0):
+
+    .. code-block:: python 
+
+        alpha = gaussian_profile(alpha, mult_peaks=True, slope=0)
+
+        plt.plot(nu, alpha)
+
     '''
     cont = baseline + slope * frequency # Continuum
 
@@ -72,15 +92,28 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
 
             * 'gaussian' (default): Gaussian function on the form:
                 .. math::
-                    S(\nu) = \exp{-\frac{(\nu-500)^2}{1.5\cdot10^5}} + 65
+                    S(\nu) = e^{-\frac{(\nu-500)^2}{1.5\cdot10^5}} + 65
 
             * 'linear': Linear function on the form:
                 .. math::
                     S(\nu) = \frac{\nu}{50} + 65
 
     mult_mu : ``bool``, default=``False``
-        If ``True``, the intensity panel will display two curves, one for :math: \mu = 1
-        , and one for :math: \mu = 0.2
+        If ``True``, the intensity panel will display two curves,
+        one for :math:`\mu = 1`, and one for :math:`\mu = 0.2`.
+    
+    Example
+    _______
+
+    An example of a four panel image created with default settings:
+
+    .. code-block:: python 
+
+        make_panels()
+        plt.show()
+    
+    .. image:: figures/linear.png
+        :width: 400
     '''
     # Number of frequency elements.
     n = 101
