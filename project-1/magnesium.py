@@ -38,26 +38,33 @@ def read_NIST_species(input_file):
 e_press = 100 * units.Pa
 temps = np.linspace(3.5e3, 2e6, 500) * units.K
 
-g, chi, chi_ion = read_NIST_species('MgI-XI.txt')
-chi = (chi / units.cm).to('aJ', equivalencies=units.spectral())
-chi_ion = (chi_ion / units.cm).to('aJ', equivalencies=units.spectral())
+g, chi, chi_ion_float = read_NIST_species('Mg-1.txt')
+chi_ion = np.ones(chi.shape) * 0
+chi_ion[-1] = chi_ion_float
+stage = np.arange(len(chi))
 
-part = np.sum(g[:, np.newaxis] * np.exp(-chi[:, np.newaxis] / (const.k_B * temps[np.newaxis, np.newaxis])), axis=1)
-exi = g[:, np.newaxis] / part[:, np.newaxis] * np.exp(-chi[:, np.newaxis] / (const.k_B * temps[np.newaxis, np.newaxis]))
-e_dens = e_press / (const.k_B * temps)
-saha_const = ((2 * np.pi * const.m_e * const.k_B * temps) / (const.h**2))**(3/2)
-nstage = np.zeros_like(part) / units.m**3
-nstage[0] = 1. / units.m**3
-print(nstage.shape)
+with open('MgI-XI.txt', 'w') as outfile:
+        outfile.write(f"#\tE (cm^-1){'':<10}\tg\tstage\tlevels\n")
 
-for r in range(len(nstage) - 1):
-    nstage[r+1] = (nstage[r] / e_dens * 2 * saha_const * part[r+1] / part[r] * np.exp(chi_ion[r+1, np.newaxis] / (const.k_B * temps[np.newaxis])))
-    print(nstage[r+1])
-# nstage /= np.sum(nstage, axis=0)
-# print(part.shape)
+count = 0
+ground_count = 0
 
-# mg = Atom('MgI-III.txt')
-# e_press = 100 * units.kPa
-# temps = np.linspace(1e2, 1e5, 500) * units.K
-# mg.plot_payne(temps, e_press)
-# plt.show()
+for i in range(1, 12):
+    filename = 'Mg-' + f'{i}' + '.txt'
+
+    g, chi, chi_ion_float = read_NIST_species(filename)
+    chi_ion = np.ones(chi.shape) * i
+    chi_ion[-1] = chi_ion_float
+    chi += ground_count
+    stage = np.ones(chi.shape, dtype=int) * (i-1)
+    stage[-1] = i
+    
+    with open('MgI-XI.txt', 'a') as outfile:
+
+        for j in range(len(g)):
+            levels = j + count
+            line = f'\t{chi[j]:<18}\t{g[j]}\t\t{stage[j]}\t\t{levels}\n'
+            outfile.write(line)
+
+    count += len(g)
+    # ground_count += chi[-1]
