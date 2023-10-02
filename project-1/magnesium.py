@@ -35,27 +35,17 @@ def read_NIST_species(input_file):
     mask = (g >= 0) & (chi >= 0)
     return g[mask], chi[mask], chi_ion
 
-e_press = 100 * units.Pa
-temps = np.linspace(3.5e3, 2e6, 500) * units.K
-
-g, chi, chi_ion_float = read_NIST_species('Mg-1.txt')
-chi_ion = np.ones(chi.shape) * 0
-chi_ion[-1] = chi_ion_float
-stage = np.arange(len(chi))
-
 with open('MgI-XI.txt', 'w') as outfile:
         outfile.write(f"#\tE (cm^-1){'':<10}\tg\tstage\tlevels\n")
 
 count = 0
-ground_count = 0
+ion = 0
 
 for i in range(1, 12):
     filename = 'Mg-' + f'{i}' + '.txt'
 
-    g, chi, chi_ion_float = read_NIST_species(filename)
-    chi_ion = np.ones(chi.shape) * i
-    chi_ion[-1] = chi_ion_float
-    chi += ground_count
+    g, chi, chi_ion = read_NIST_species(filename)
+    chi += ion
     stage = np.ones(chi.shape, dtype=int) * (i-1)
     stage[-1] = i
     
@@ -67,4 +57,30 @@ for i in range(1, 12):
             outfile.write(line)
 
     count += len(g)
-    # ground_count += chi[-1]
+    ion = chi_ion
+
+e_press = 100 * units.Pa
+temps = np.linspace(3.5e3, 2e6, 10000) * units.K
+
+MgI_III = Atom('MgI-III.txt')
+wavelength_aJ = MgI_III.chi[1, :]
+wavelength_nm = wavelength_aJ.to('nm', equivalencies=units.spectral())
+
+h_line = np.logical_and(wavelength_nm.value >= 279, wavelength_nm.value <= 280)
+k_line = np.logical_and(wavelength_nm.value >= 280, wavelength_nm.value <= 281)
+
+print(f'Energy of Mg II h_line: {wavelength_aJ[h_line][0]:.3f}')
+print(f'Energy of Mg II k_line: {wavelength_aJ[k_line][0]:.3f}')
+
+MgI_XI = Atom('MgI-XI.txt')
+MgI_XI.plot_payne(temps, e_press, compute_excitation=False)
+
+CIE = np.loadtxt('Mg_CIE.txt')
+temp = CIE[:,0]
+plt.subplots()
+plt.plot(temp, CIE[:, 1:], 'r')
+plt.xscale('log')
+plt.yscale('log')
+plt.ylim(1e-6, 1.1)
+
+plt.show()

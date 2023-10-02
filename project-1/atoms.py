@@ -130,7 +130,7 @@ class Atom:
         # your code here
         return (self.compute_excitation(temperature) * self.compute_ionisation(temperature, electron_pressure)[:, np.newaxis])
 
-    def plot_payne(self, temperature, electron_pressure):
+    def plot_payne(self, temperature, electron_pressure, compute_excitation=True, ax=None):
         """
         Plots the Payne curves for the current atom.
         
@@ -140,21 +140,39 @@ class Atom:
             Gas temperature in units of K or equivalent.
         electron_pressure: astropy.units.quantity (scalar)
             Electron pressure in units of Pa or equivalent.
+        compute_exitation: bool, optional 
+            If True (default), call compute exitation before
+            plotting. If False, plot only the ionization strength.
+        ax: matplotlib.axes._subplots.AxesSubplot, optional
+            Axis to plot the Payne diagram on.
         """
         # your code here
-        pops = self.compute_populations(temperature, electron_pressure)
-        fig, ax = plt.subplots()
+        if compute_excitation:
+            pops = self.compute_populations(temperature, electron_pressure)
+        
+        else:
+            pops = self.compute_ionisation(temperature, electron_pressure)[:, np.newaxis]
+
+        if ax is None:
+            fig, ax = plt.subplots()
+            
         ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 0].T, 'b-')
         n_levels = self.chi.shape[1]
 
-        if n_levels > 1:
-            ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 1].T, 'r--')
+        if compute_excitation:
+            if n_levels > 1:
+                ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 1].T, 'r--')
+            
+            if n_levels > 2:
+                ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 2].T, 'k:')
         
-        if n_levels > 2:
-            ax.plot(np.tile(temperature, (self.n_stages, 1)).T, pops[:, 2].T, 'k:')
-        
+            ax.set_ylim(1e-6, 1.1)
+            
+        else:
+            ax.set_xscale('log')
+            ax.set_ylim(1e-6, 1.1)
+
         ax.set_yscale('log')
-        ax.set_ylim(1e-6, 1.1)
         ax.set_xlabel('Temperature [K]')
         ax.set_ylabel('Populations')
 

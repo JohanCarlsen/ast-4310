@@ -56,7 +56,7 @@ def gaussian_profile(frequency, mult_peaks=False, baseline=0.1, slope=0.01, scal
 
     return profile   
 
-def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
+def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False, custom_pad=False):
     r'''
     Create four panels for visualising the extinction, optical depth, intensity, and source function.
 
@@ -81,6 +81,10 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
     mult_mu : ``bool``, default=``False``
         If ``True``, the intensity panel will display two curves, one for :math: \mu = 1
         , and one for :math: \mu = 0.2
+    
+    custom_pad : ``bool`` default=``false``
+        If true, a padding will be created for the figures to try and see the correlation
+        between the scatters in the four panels.
     '''
     # Number of frequency elements.
     n = 101
@@ -153,16 +157,32 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
     ax3.plot(freq[50], I[50], 'ro')
 
     if mult_mu:
+        idx = tau[:, 0] >= 0.2
+        tau_mu = tau[:, 0][idx][0]
+
         I2 = np.trapz(S[:, np.newaxis] * np.exp(-tau / 0.2), tau, axis=0)
         ax3.plot(freq, I2, color='saddlebrown', label=r'I$(\mu=0.2)$')
         ax3.plot(freq[0], I2[0], 'bo')
         ax3.plot(freq[50], I2[50], 'ro')
         ax3.legend()
+        print(f"\n{'':<6}S_nu(tau_nu=0.2) = {S[idx][0]:.2f}, {S[tau_zhalf][0]:.2f}")
+        print(f'I_nu(tau_nu=0, mu=0.2) = {I2[0]:5.2f}, {I2[50]:.2f}')
 
     ax4.set_title(r'Source function $S(z)$')
     ax4.plot(z, S, color='black')
     ax4.plot(z[tau_z0], S[tau_z0], 'bo')
     ax4.plot(z[tau_zhalf], S[tau_zhalf], 'ro')
+
+    if custom_pad:
+        ax3.set_ylim(0, np.max([I[0], I[50]]))
+        ax4.set_ylim(0, np.max([S[tau_z0], S[tau_zhalf]]))
+
+        for ax in axes.flatten():
+            pad = ax.get_ylim()[1] * 0.1
+            ax.set_ylim(-pad, ax.get_ylim()[1] + pad)
+    
+    print(f"\n{'':<6}S_nu(tau_nu=1) = {S[tau_z0][0]:.2f}, {S[tau_zhalf][0]:.2f}")
+    print(f'I_nu(tau_nu=0, mu=1) = {I[0]:.2f}, {I[50]:.2f}')
 
     fig.tight_layout()
     figname = source_func + 'mult' if mult_mu else source_func
@@ -170,8 +190,8 @@ def make_panels(profile_func='gaussian', source_func='gaussian', mult_mu=False):
 
 if __name__ == '__main__':
 
-    make_panels()
-    make_panels(profile_func=(True, 0.2, 0, 1000), source_func='linear')
-    make_panels(profile_func=(False, 0.2, 0, 1000), source_func='linear', mult_mu=True)
+    # make_panels()
+    # make_panels(profile_func=(True, 0.2, 0, 1000), source_func='linear', custom_pad=True)
+    make_panels(profile_func=(False, 0.1, 0, 50), source_func='linear', mult_mu=True, custom_pad=True)
 
-    plt.show()
+    # plt.show()
